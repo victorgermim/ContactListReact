@@ -1,16 +1,16 @@
-    import React from 'react';
-    import { useSelector, useDispatch } from 'react-redux';
-    import { removeContact } from '../features/contacts/contactsSlice';
-    import styled from 'styled-components';
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { removeContact } from '../features/contacts/contactsSlice'
+import styled from 'styled-components'
 
-    const Table = styled.table`
+const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-top: 2rem;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   overflow: hidden;
-`;
+`
 
 const Th = styled.th`
   background-color: #ffffff;
@@ -20,7 +20,7 @@ const Th = styled.th`
   text-align: left;
   border-bottom: 2px solid #f0f0f0;
   font-family: 'Roboto', sans-serif;
-`;
+`
 
 const Td = styled.td`
   padding: 15px 20px;
@@ -29,7 +29,7 @@ const Td = styled.td`
   &:last-child {
     text-align: right;
   }
-`;
+`
 
 const ActionButton = styled.button`
   padding: 8px 12px;
@@ -57,37 +57,42 @@ const ActionButton = styled.button`
       color: red;
     }
   }
-`;
+`
 
 export const ContactsList = ({ onEdit }) => {
-    const contacts = useSelector((state) => state.contacts.list);
-    const dispatch = useDispatch();
-  
-    return (
-      <Table>
-        <thead>
-          <tr>
-            <Th>Nome</Th>
-            <Th>Telefone</Th>
-            <Th>Email</Th>
-            <Th>Ações</Th>
+  const contacts = useSelector((state) => state.contacts.list)
+  const dispatch = useDispatch()
+
+  return (
+    <Table>
+      <thead>
+        <tr>
+          <Th>Nome</Th>
+          <Th>Telefone</Th>
+          <Th>Email</Th>
+          <Th>Ações</Th>
+        </tr>
+      </thead>
+      <tbody>
+        {contacts.map((contact) => (
+          <tr key={contact.id}>
+            <Td>{contact.name}</Td>
+            <Td>{contact.phone}</Td>
+            <Td>{contact.email}</Td>
+            <Td>
+              <ActionButton onClick={() => onEdit(contact)}>
+                Editar
+              </ActionButton>
+              <ActionButton
+                className="delete"
+                onClick={() => dispatch(removeContact(contact.id))}
+              >
+                Excluir
+              </ActionButton>
+            </Td>
           </tr>
-        </thead>
-        <tbody>
-          {contacts.map((contact) => (
-            <tr key={contact.id}>
-              <Td>{contact.name}</Td>
-              <Td>{contact.phone}</Td>
-              <Td>{contact.email}</Td>
-              <Td>
-                <ActionButton onClick={() => onEdit(contact)}>Editar</ActionButton>
-                <ActionButton className="delete" onClick={() => dispatch(removeContact(contact.id))}>
-                  Excluir
-                </ActionButton>
-              </Td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    );
-  };
+        ))}
+      </tbody>
+    </Table>
+  )
+}
